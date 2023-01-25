@@ -4,6 +4,9 @@ import { galleryItems } from "./gallery-items.js";
 const galleryEl = document.querySelector(".gallery");
 const imageCardsMarkup = createImageCardsMarkup(galleryItems);
 
+galleryEl.insertAdjacentHTML("beforeend", imageCardsMarkup);
+galleryEl.addEventListener("click", onImageClick);
+
 function createImageCardsMarkup(images) {
   return images
     .map(
@@ -22,12 +25,13 @@ function createImageCardsMarkup(images) {
     .join("");
 }
 
-galleryEl.insertAdjacentHTML("beforeend", imageCardsMarkup);
-
-galleryEl.addEventListener("click", onImageClick);
-
 function onImageClick(evt) {
   evt.preventDefault();
+
+  if (evt.target.nodeName !== "IMG") {
+    return;
+  }
+
   const dataSource = evt.target.getAttribute("data-source");
   const description = evt.target.getAttribute("alt");
   const instance = basicLightbox.create(
